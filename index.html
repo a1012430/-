@@ -15,33 +15,176 @@
   <label for="phoneModel">選擇手機型號：</label>
   <select id="phoneModel">
     <option value="">請選擇</option>
-    <option value="iphone-13">iPhone 13</option>
-    <option value="iphone-14">iPhone 14</option>
-    <option value="samsung-s21">Samsung S21</option>
-    <option value="samsung-s22">Samsung S22</option>
   </select>
+
+  <label for="phoneStorage">選擇容量：</label>
+  <select id="phoneStorage">
+    <option value="">請選擇</option>
+  </select>
+
   <button onclick="calculatePrice()">估算價格</button>
   <div id="result"></div>
 
   <script>
+    // JSON 數據
     const priceData = {
-      'iphone-13': { normal: 500, reasonable: 450 },
-      'iphone-14': { normal: 700, reasonable: 650 },
-      'samsung-s21': { normal: 400, reasonable: 350 },
-      'samsung-s22': { normal: 600, reasonable: 550 }
+      "工作表1": [
+        { "型號": "IPHONE 8", "容量": "64G", "價格": 1000 },
+        { "型號": "IPHONE 8", "容量": "128G", "價格": 1200 },
+        { "型號": "IPHONE 8", "容量": "256G", "價格": 1500 },
+        { "型號": "IPHONE 8+", "容量": "64G", "價格": 1500 },
+        { "型號": "IPHONE 8+", "容量": "128G", "價格": 1700 },
+        { "型號": "IPHONE 8+", "容量": "256G", "價格": 2000 },
+        { "型號": "IPHONE SE2", "容量": "64G", "價格": 2500 },
+        { "型號": "IPHONE SE2", "容量": "128G", "價格": 2700 },
+        { "型號": "IPHONE SE2", "容量": "256G", "價格": 3000 },
+        { "型號": "IPHONE SE3", "容量": "128G", "價格": 3500 },
+        { "型號": "IPHONE SE3", "容量": "256G", "價格": 4000 },
+        { "型號": "IPHONE SE3", "容量": "512G", "價格": 4500 },
+        { "型號": "IPHONE X", "容量": "64G", "價格": 2000 },
+        { "型號": "IPHONE X", "容量": "256G", "價格": 2200 },
+        { "型號": "IPHONE X", "容量": "512G", "價格": 2500 },
+        { "型號": "IPHONE XR", "容量": "64G", "價格": 2500 },
+        { "型號": "IPHONE XR", "容量": "128G", "價格": 3000 },
+        { "型號": "IPHONE XR", "容量": "256G", "價格": 3500 },
+        { "型號": "IPHONE XS", "容量": "64G", "價格": 2500 },
+        { "型號": "IPHONE XS", "容量": "256G", "價格": 3000 },
+        { "型號": "IPHONE XS", "容量": "512G", "價格": 3500 },
+        { "型號": "IPHONE XS MAX", "容量": "64G", "價格": 3500 },
+        { "型號": "IPHONE XS MAX", "容量": "256G", "價格": 4000 },
+        { "型號": "IPHONE XS MAX", "容量": "512G", "價格": 4500 },
+        { "型號": "IPHONE 11", "容量": "64G", "價格": 4500 },
+        { "型號": "IPHONE 11", "容量": "128G", "價格": 5000 },
+        { "型號": "IPHONE 11", "容量": "256G", "價格": 5500 },
+        { "型號": "IPHONE 11 PRO", "容量": "64G", "價格": 5000 },
+        { "型號": "IPHONE 11 PRO", "容量": "256G", "價格": 6000 },
+        { "型號": "IPHONE 11 PRO", "容量": "512G", "價格": 6500 },
+        { "型號": "IPHONE 11 PRO MAX", "容量": "64G", "價格": 6000 },
+        { "型號": "IPHONE 11 PRO MAX", "容量": "256G", "價格": 7000 },
+        { "型號": "IPHONE 11 PRO MAX", "容量": "512G", "價格": 7500 },
+        { "型號": "IPHONE 12 MINI", "容量": "64G", "價格": 4500 },
+        { "型號": "IPHONE 12 MINI", "容量": "128G", "價格": 5000 },
+        { "型號": "IPHONE 12 MINI", "容量": "256G", "價格": 5500 },
+        { "型號": "IPHONE 12", "容量": "64G", "價格": 6000 },
+        { "型號": "IPHONE 12", "容量": "128G", "價格": 7000 },
+        { "型號": "IPHONE 12", "容量": "256G", "價格": 7500 },
+        { "型號": "IPHONE 12 PRO", "容量": "128G", "價格": 8000 },
+        { "型號": "IPHONE 12 PRO", "容量": "256G", "價格": 9000 },
+        { "型號": "IPHONE 12 PRO", "容量": "512G", "價格": 10000 },
+        { "型號": "IPHONE 12 PRO MAX", "容量": "128G", "價格": 10000 },
+        { "型號": "IPHONE 12 PRO MAX", "容量": "256G", "價格": 11000 },
+        { "型號": "IPHONE 12 PRO MAX", "容量": "512G", "價格": 12000 },
+        { "型號": "IPHONE 13 MINI", "容量": "128G", "價格": 7000 },
+        { "型號": "IPHONE 13 MINI", "容量": "256G", "價格": 8000 },
+        { "型號": "IPHONE 13 MINI", "容量": "512G", "價格": 8500 },
+        { "型號": "IPHONE 13", "容量": "128G", "價格": 9000 },
+        { "型號": "IPHONE 13", "容量": "256G", "價格": 10000 },
+        { "型號": "IPHONE 13", "容量": "512G", "價格": 10500 },
+        { "型號": "IPHONE 13 PRO", "容量": "128G", "價格": 11000 },
+        { "型號": "IPHONE 13 PRO", "容量": "256G", "價格": 12000 },
+        { "型號": "IPHONE 13 PRO", "容量": "512G", "價格": 13500 },
+        { "型號": "IPHONE 13 PRO", "容量": "1T", "價格": 14500 },
+        { "型號": "IPHONE 13 PRO MAX", "容量": "128G", "價格": 12500 },
+        { "型號": "IPHONE 13 PRO MAX", "容量": "256G", "價格": 14000 },
+        { "型號": "IPHONE 13 PRO MAX", "容量": "512G", "價格": 15000 },
+        { "型號": "IPHONE 13 PRO MAX", "容量": "1T", "價格": 16000 },
+        { "型號": "IPHONE 14", "容量": "128G", "價格": 10500 },
+        { "型號": "IPHONE 14", "容量": "256G", "價格": 11500 },
+        { "型號": "IPHONE 14", "容量": "512G", "價格": 12500 },
+        { "型號": "IPHONE 14 PLUS", "容量": "128G", "價格": 12000 },
+        { "型號": "IPHONE 14 PLUS", "容量": "256G", "價格": 13500 },
+        { "型號": "IPHONE 14 PLUS", "容量": "512G", "價格": 14500 },
+        { "型號": "IPHONE 14 PRO", "容量": "128G", "價格": 12500 },
+        { "型號": "IPHONE 14 PRO", "容量": "256G", "價格": 14000 },
+        { "型號": "IPHONE 14 PRO", "容量": "512G", "價格": 15000 },
+        { "型號": "IPHONE 14 PRO", "容量": "1T", "價格": 16000 },
+        { "型號": "IPHONE 14 PRO MAX", "容量": "128G", "價格": 15000 },
+        { "型號": "IPHONE 14 PRO MAX", "容量": "256G", "價格": 17000 },
+        { "型號": "IPHONE 14 PRO MAX", "容量": "512G", "價格": 18000 },
+        { "型號": "IPHONE 14 PRO MAX", "容量": "1T", "價格": 19000 },
+        { "型號": "IPHONE 15", "容量": "128G", "價格": 12500 },
+        { "型號": "IPHONE 15", "容量": "256G", "價格": 14000 },
+        { "型號": "IPHONE 15", "容量": "512G", "價格": 15000 },
+        { "型號": "IPHONE 15 PLUS", "容量": "128G", "價格": 14000 },
+        { "型號": "IPHONE 15 PLUS", "容量": "256G", "價格": 15500 },
+        { "型號": "IPHONE 15 PLUS", "容量": "512G", "價格": 18500 },
+        { "型號": "IPHONE 15 PRO", "容量": "128G", "價格": 19000 },
+        { "型號": "IPHONE 15 PRO", "容量": "256G", "價格": 20500 },
+        { "型號": "IPHONE 15 PRO", "容量": "512G", "價格": 21500 },
+        { "型號": "IPHONE 15 PRO", "容量": "1T", "價格": 22500 },
+        { "型號": "IPHONE 15 PRO MAX", "容量": "256G", "價格": 24000 },
+        { "型號": "IPHONE 15 PRO MAX", "容量": "512G", "價格": 25500 },
+        { "型號": "IPHONE 15 PRO MAX", "容量": "1T", "價格": 26500 },
+        { "型號": "IPHONE 16", "容量": "128G", "價格": 19000 },
+        { "型號": "IPHONE 16", "容量": "256G", "價格": 21000 },
+        { "型號": "IPHONE 16", "容量": "512G", "價格": 23000 },
+        { "型號": "IPHONE 16 PLUS", "容量": "128G", "價格": 21500 },
+        { "型號": "IPHONE 16 PLUS", "容量": "256G", "價格": 23500 },
+        { "型號": "IPHONE 16 PLUS", "容量": "512G", "價格": 25000 },
+        { "型號": "IPHONE 16 PRO", "容量": "128G", "價格": 25000 },
+        { "型號": "IPHONE 16 PRO", "容量": "256G", "價格": 27500 },
+        { "型號": "IPHONE 16 PRO", "容量": "512G", "價格": 30000 },
+        { "型號": "IPHONE 16 PRO", "容量": "1T", "價格": 32000 },
+        { "型號": "IPHONE 16 PRO MAX", "容量": "256G", "價格": 33000 },
+        { "型號": "IPHONE 16 PRO MAX", "容量": "512G", "價格": 35000 },
+        { "型號": "IPHONE 16 PRO MAX", "容量": "1T", "價格": 37000 }
+      ]
     };
 
-    function calculatePrice() {
-      const model = document.getElementById('phoneModel').value;
-      const resultDiv = document.getElementById('result');
+    // 動態生成型號下拉式選單
+    const modelSelect = document.getElementById('phoneModel');
+    const storageSelect = document.getElementById('phoneStorage');
+    const resultDiv = document.getElementById('result');
 
-      if (!model) {
-        resultDiv.innerHTML = '請選擇手機型號';
+    // 去重複的型號
+    const uniqueModels = [...new Set(priceData.工作表1.map(item => item.型號))];
+
+    // 填充型號選項
+    uniqueModels.forEach(model => {
+      const option = document.createElement('option');
+      option.value = model;
+      option.textContent = model;
+      modelSelect.appendChild(option);
+    });
+
+    // 當型號改變時，更新容量選項
+    modelSelect.addEventListener('change', () => {
+      const selectedModel = modelSelect.value;
+      storageSelect.innerHTML = '<option value="">請選擇</option>'; // 清空選項
+
+      if (selectedModel) {
+        const storages = priceData.工作表1
+          .filter(item => item.型號 === selectedModel)
+          .map(item => item.容量);
+
+        storages.forEach(storage => {
+          const option = document.createElement('option');
+          option.value = storage;
+          option.textContent = storage;
+          storageSelect.appendChild(option);
+        });
+      }
+    });
+
+    // 計算價格
+    function calculatePrice() {
+      const selectedModel = modelSelect.value;
+      const selectedStorage = storageSelect.value;
+
+      if (!selectedModel || !selectedStorage) {
+        resultDiv.innerHTML = '請選擇手機型號和容量';
         return;
       }
 
-      const { normal, reasonable } = priceData[model];
-      resultDiv.innerHTML = `正常收購價：$${normal}<br>合理價錢：$${reasonable}`;
+      const selectedItem = priceData.工作表1.find(
+        item => item.型號 === selectedModel && item.容量 === selectedStorage
+      );
+
+      if (selectedItem) {
+        resultDiv.innerHTML = `正常收購價：$${selectedItem.價格}`;
+      } else {
+        resultDiv.innerHTML = '找不到該型號和容量的價格';
+      }
     }
   </script>
 </body>
