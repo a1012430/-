@@ -3,27 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>手機估價程式</title>
+  <title>手機估價程式 - 登入</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    select, button { margin-bottom: 15px; padding: 10px; width: 100%; }
-    #result { margin-top: 20px; font-size: 1.2em; }
+    input, button { margin-bottom: 15px; padding: 10px; width: 100%; }
+    #loginMessage { margin-top: 20px; font-size: 1.2em; color: red; }
   </style>
 </head>
 <body>
-  <h1>手機估價程式</h1>
-  <label for="phoneModel">選擇手機型號：</label>
-  <select id="phoneModel">
-    <option value="">請選擇</option>
-  </select>
+  <h1>手機估價程式 - 登入</h1>
+  <label for="username">帳戶名：</label>
+  <input type="text" id="username" placeholder="輸入帳戶名">
 
-  <label for="phoneStorage">選擇容量：</label>
-  <select id="phoneStorage">
-    <option value="">請選擇</option>
-  </select>
+  <label for="password">密碼：</label>
+  <input type="password" id="password" placeholder="輸入密碼">
 
-  <button onclick="calculatePrice()">估算價格</button>
-  <div id="result"></div>
+  <button onclick="login()">登入</button>
+  <div id="loginMessage"></div>
+
+  <!-- 估價程式頁面（默認隱藏） -->
+  <div id="app" style="display: none;">
+    <h1>手機估價程式</h1>
+    <label for="phoneModel">選擇手機型號：</label>
+    <select id="phoneModel">
+      <option value="">請選擇</option>
+    </select>
+
+    <label for="phoneStorage">選擇容量：</label>
+    <select id="phoneStorage">
+      <option value="">請選擇</option>
+    </select>
+
+    <button onclick="calculatePrice()">估算價格</button>
+    <div id="result"></div>
+  </div>
 
   <script>
     // JSON 數據
@@ -130,6 +143,26 @@
         { "型號": "IPHONE 16 PRO MAX", "容量": "1T", "價格": 37000 }
       ]
     };
+
+    // 登入功能
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const loginMessage = document.getElementById('loginMessage');
+
+      if (username === 'a1012430' && password === '0613') {
+        // 登入成功，顯示估價程式
+        document.getElementById('app').style.display = 'block';
+        document.querySelector('h1').style.display = 'none'; // 隱藏登入標題
+        document.getElementById('username').style.display = 'none';
+        document.getElementById('password').style.display = 'none';
+        document.querySelector('button').style.display = 'none';
+        loginMessage.innerHTML = '';
+      } else {
+        // 登入失敗，顯示錯誤訊息
+        loginMessage.innerHTML = '帳戶名或密碼錯誤，請重試！';
+      }
+    }
 
     // 動態生成型號下拉式選單
     const modelSelect = document.getElementById('phoneModel');
