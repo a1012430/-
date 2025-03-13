@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手機估價程式</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    select, button { margin-bottom: 15px; padding: 10px; width: 100%; }
+    #result { margin-top: 20px; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>手機估價程式</h1>
+  <label for="phoneModel">選擇手機型號：</label>
+  <select id="phoneModel">
+    <option value="">請選擇</option>
+    <option value="iphone-13">iPhone 13</option>
+    <option value="iphone-14">iPhone 14</option>
+    <option value="samsung-s21">Samsung S21</option>
+    <option value="samsung-s22">Samsung S22</option>
+  </select>
+  <button onclick="calculatePrice()">估算價格</button>
+  <div id="result"></div>
+
+  <script>
+    const priceData = {
+      'iphone-13': { normal: 500, reasonable: 450 },
+      'iphone-14': { normal: 700, reasonable: 650 },
+      'samsung-s21': { normal: 400, reasonable: 350 },
+      'samsung-s22': { normal: 600, reasonable: 550 }
+    };
+
+    function calculatePrice() {
+      const model = document.getElementById('phoneModel').value;
+      const resultDiv = document.getElementById('result');
+
+      if (!model) {
+        resultDiv.innerHTML = '請選擇手機型號';
+        return;
+      }
+
+      const { normal, reasonable } = priceData[model];
+      resultDiv.innerHTML = `正常收購價：$${normal}<br>合理價錢：$${reasonable}`;
+    }
+  </script>
+</body>
+</html>
