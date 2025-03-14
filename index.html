@@ -3,26 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>手機估價程式 - 登入</title>
+  <title>手機估價程式</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button { margin-bottom: 15px; padding: 10px; width: 100%; }
-    #loginMessage { margin-top: 20px; font-size: 1.2em; color: red; }
+    input, select, button { margin-bottom: 15px; padding: 10px; width: 100%; }
+    #result, #loginMessage { margin-top: 20px; font-size: 1.2em; }
+    #loginMessage { color: red; }
+    #app { display: none; } /* 默認隱藏估價程式 */
   </style>
 </head>
 <body>
-  <h1>手機估價程式 - 登入</h1>
-  <label for="username">帳戶名：</label>
-  <input type="text" id="username" placeholder="輸入帳戶名">
+  <!-- 登入頁面 -->
+  <div id="login">
+    <h1>手機估價程式 - 登入</h1>
+    <label for="username">帳戶名：</label>
+    <input type="text" id="username" placeholder="輸入帳戶名">
 
-  <label for="password">密碼：</label>
-  <input type="password" id="password" placeholder="輸入密碼">
+    <label for="password">密碼：</label>
+    <input type="password" id="password" placeholder="輸入密碼">
 
-  <button onclick="login()">登入</button>
-  <div id="loginMessage"></div>
+    <button onclick="login()">登入</button>
+    <div id="loginMessage"></div>
+  </div>
 
   <!-- 估價程式頁面（默認隱藏） -->
-  <div id="app" style="display: none;">
+  <div id="app">
     <h1>手機估價程式</h1>
     <label for="phoneModel">選擇手機型號：</label>
     <select id="phoneModel">
@@ -152,12 +157,8 @@
 
       if (username === 'a1012430' && password === '0613') {
         // 登入成功，顯示估價程式
-        document.getElementById('app').style.display = 'block';
-        document.querySelector('h1').style.display = 'none'; // 隱藏登入標題
-        document.getElementById('username').style.display = 'none';
-        document.getElementById('password').style.display = 'none';
-        document.querySelector('button').style.display = 'none';
-        loginMessage.innerHTML = '';
+        document.getElementById('login').style.display = 'none'; // 隱藏登入頁面
+        document.getElementById('app').style.display = 'block'; // 顯示估價程式
       } else {
         // 登入失敗，顯示錯誤訊息
         loginMessage.innerHTML = '帳戶名或密碼錯誤，請重試！';
