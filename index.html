@@ -5,46 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>手機估價程式</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, select, button { margin-bottom: 15px; padding: 10px; width: 100%; }
-    #result, #loginMessage { margin-top: 20px; font-size: 1.2em; }
-    #loginMessage { color: red; }
-    #app { display: none; } /* 默認隱藏估價程式 */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select, button {
+      margin-bottom: 15px;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #result, #loginMessage {
+      margin-top: 20px;
+      font-size: 1.2em;
+      line-height: 1.5;
+    }
+    #loginMessage {
+      color: #dc3545;
+    }
+    #app {
+      display: none;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      margin-top: 20px;
+    }
+    .logout-btn:hover {
+      background-color: #b02a37;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- 登入頁面 -->
-  <div id="login">
-    <h1>手機估價程式 - 登入</h1>
-    <label for="username">帳戶名：</label>
-    <input type="text" id="username" placeholder="輸入帳戶名">
+  <div class="container">
+    <!-- 登入頁面 -->
+    <div id="login">
+      <h1>手機估價程式 - 登入</h1>
+      <label for="username">帳戶名：</label>
+      <input type="text" id="username" placeholder="輸入帳戶名">
 
-    <label for="password">密碼：</label>
-    <input type="password" id="password" placeholder="輸入密碼">
+      <label for="password">密碼：</label>
+      <input type="password" id="password" placeholder="輸入密碼">
 
-    <button onclick="login()">登入</button>
-    <div id="loginMessage"></div>
-  </div>
+      <button onclick="login()">登入</button>
+      <div id="loginMessage"></div>
+    </div>
 
-  <!-- 估價程式頁面（默認隱藏） -->
-  <div id="app">
-    <h1>手機估價程式</h1>
-    <label for="phoneModel">選擇手機型號：</label>
-    <select id="phoneModel">
-      <option value="">請選擇</option>
-    </select>
+    <!-- 估價程式頁面 -->
+    <div id="app">
+      <h1>手機估價程式</h1>
+      <label for="phoneModel">選擇手機型號：</label>
+      <select id="phoneModel">
+        <option value="">請選擇</option>
+      </select>
 
-    <label for="phoneStorage">選擇容量：</label>
-    <select id="phoneStorage">
-      <option value="">請選擇</option>
-    </select>
+      <label for="phoneStorage">選擇容量：</label>
+      <select id="phoneStorage">
+        <option value="">請選擇</option>
+      </select>
 
-    <button onclick="calculatePrice()">估算價格</button>
-    <div id="result"></div>
+      <label for="batteryChange">電池是否需要更換：</label>
+      <select id="batteryChange">
+        <option value="no">不需要更換</option>
+        <option value="yes">需要更換</option>
+      </select>
+
+      <label for="screenChange">螢幕是否需要更換：</label>
+      <select id="screenChange">
+        <option value="no">不需要更換</option>
+        <option value="yes">需要更換</option>
+      </select>
+
+      <button onclick="calculatePrice()">估算價格</button>
+      <div id="result"></div>
+      <button class="logout-btn" onclick="logout()">登出</button>
+    </div>
   </div>
 
   <script>
-    // JSON 數據
+    // 資料庫保持原始數據不變
     const priceData = {
       "工作表1": [
         { "型號": "IPHONE 8", "容量": "64G", "價格": 1000 },
@@ -101,11 +175,9 @@
         { "型號": "IPHONE 13 PRO", "容量": "128G", "價格": 11000 },
         { "型號": "IPHONE 13 PRO", "容量": "256G", "價格": 12000 },
         { "型號": "IPHONE 13 PRO", "容量": "512G", "價格": 13500 },
-        { "型號": "IPHONE 13 PRO", "容量": "1T", "價格": 14500 },
-        { "型號": "IPHONE 13 PRO MAX", "容量": "128G", "價格": 12500 },
+        { "型號": "IPHONE 13 PRO MAX", "容量": "128G", "價格": 13000 },
         { "型號": "IPHONE 13 PRO MAX", "容量": "256G", "價格": 14000 },
         { "型號": "IPHONE 13 PRO MAX", "容量": "512G", "價格": 15000 },
-        { "型號": "IPHONE 13 PRO MAX", "容量": "1T", "價格": 16000 },
         { "型號": "IPHONE 14", "容量": "128G", "價格": 10500 },
         { "型號": "IPHONE 14", "容量": "256G", "價格": 11500 },
         { "型號": "IPHONE 14", "容量": "512G", "價格": 12500 },
@@ -146,80 +218,229 @@
         { "型號": "IPHONE 16 PRO MAX", "容量": "256G", "價格": 33000 },
         { "型號": "IPHONE 16 PRO MAX", "容量": "512G", "價格": 35000 },
         { "型號": "IPHONE 16 PRO MAX", "容量": "1T", "價格": 37000 }
+      ],
+      "電池": [
+        { "電池": "IPHONE 8", "Column2": "祥碩電池", "Column3": 275, "Column4": 400 },
+        { "電池": "IPHONE 8+", "Column2": "祥碩電池", "Column3": 305, "Column4": 400 },
+        { "電池": "IPHONE X", "Column2": "祥碩電池", "Column3": 415, "Column4": 400 },
+        { "電池": "IPHONE XS", "Column2": "祥碩電池", "Column3": 450, "Column4": 400 },
+        { "電池": "IPHONE XR", "Column2": "祥碩電池", "Column3": 345, "Column4": 400 },
+        { "電池": "IPHONE XS MAX", "Column2": "祥碩電池", "Column3": 450, "Column4": 400 },
+        { "電池": "IPHONE 11", "Column2": "祥碩電池", "Column3": 395, "Column4": 400 },
+        { "電池": "IPHONE 11 PRO", "Column2": "祥碩電池", "Column3": 510, "Column4": 400 },
+        { "電池": "IPHONE 11 PRO MAX", "Column2": "祥碩電池", "Column3": 535, "Column4": 400 },
+        { "電池": "IPHONE 12", "Column2": "祥碩電池", "Column3": 395, "Column4": 400 },
+        { "電池": "IPHONE 12 PRO", "Column2": "祥碩電池", "Column3": 395, "Column4": 400 },
+        { "電池": "IPHONE 12 PRO MAX", "Column2": "祥碩電池", "Column3": 495, "Column4": 400 },
+        { "電池": "IPHONE 12 MINI", "Column2": "祥碩電池", "Column3": 390, "Column4": 400 },
+        { "電池": "IPHONE 13", "Column2": "祥碩電池", "Column3": 415, "Column4": 400 },
+        { "電池": "IPHONE 13 PRO", "Column2": "祥碩電池", "Column3": 495, "Column4": 400 },
+        { "電池": "IPHONE 13 PRO MAX", "Column2": "祥碩電池", "Column3": 580, "Column4": 400 },
+        { "電池": "IPHONE 13 MINI", "Column2": "祥碩電池", "Column3": 395, "Column4": 400 },
+        { "電池": "IPHONE 14", "Column2": "祥碩電池", "Column3": 535, "Column4": 400 },
+        { "電池": "IPHONE 14 PLUS", "Column2": "祥碩電池", "Column3": 550, "Column4": 400 },
+        { "電池": "IPHONE 14 PRO", "Column2": "祥碩電池", "Column3": 590, "Column4": 400 },
+        { "電池": "IPHONE 14 PRO MAX", "Column2": "祥碩電池", "Column3": 650, "Column4": 400 },
+      ],
+      "螢幕": [
+        {"螢幕": "IPHONE 11 PRO MAX","Column2": "OLED A++ 可搬","Column3": 1290,"Column4": 700},
+        {"螢幕": "IPHONE 12","Column2": "OLED A++ 可搬","Column3": 1490,"Column4": 700},
+        {"螢幕": "IPHONE 12 PRO","Column2": "OLED A++ 可搬","Column3": 1490,"Column4": 700},
+        {"螢幕": "IPHONE 12 PRO MAX","Column2": "OLED A++ 可搬","Column3": 2290,"Column4": 700},
+        {"螢幕": "IPHONE 12 MINI","Column2": "OLED A++ 可搬","Column3": 1990,"Column4": 700},
+        {"螢幕": "IPHONE 13","Column2": "OLED A++ 可搬","Column3": 1750,"Column4": 700},
+        {"螢幕": "IPHONE 13 PRO","Column2": "OLED A++ 可搬","Column3": 2390,"Column4": 700},
+        {"螢幕": "IPHONE 13 PRO MAX","Column2": "OLED A++ 可搬","Column3": 3290,"Column4": 700},
+        {"螢幕": "IPHONE 13 MINI","Column2": "OLED A++ 可搬","Column3": 1990,"Column4": 700},
+        {"螢幕": "IPHONE 14","Column2": "OLED A++ 可搬","Column3": 1650,"Column4": 700},
+        {"螢幕": "IPHONE 14 PLUS","Column2": "OLED A++ 可搬","Column3": 2190,"Column4": 700},
+        {"螢幕": "IPHONE 14 PRO","Column2": "OLED A++ 可搬","Column3": 4290,"Column4": 700},
+        {"螢幕": "IPHONE 14 PRO MAX","Column2": "OLED A++ 可搬","Column3": 5590,"Column4": 700},
+        {"螢幕": "IPHONE 15","Column2": "OLED A++ 可搬","Column3": 3290,"Column4": 700},
+        {"螢幕": "IPHONE 15 PRO","Column2": "OLED A++ 可搬","Column3": 4290, "Column4": 700},
       ]
     };
 
-    // 登入功能
-    function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const loginMessage = document.getElementById('loginMessage');
+    // DOM 元素
+    const elements = {
+      loginDiv: document.getElementById('login'),
+      appDiv: document.getElementById('app'),
+      loginMessage: document.getElementById('loginMessage'),
+      username: document.getElementById('username'),
+      password: document.getElementById('password'),
+      modelSelect: document.getElementById('phoneModel'),
+      storageSelect: document.getElementById('phoneStorage'),
+      batteryChange: document.getElementById('batteryChange'),
+      screenChange: document.getElementById('screenChange'),
+      resultDiv: document.getElementById('result')
+    };
 
-      if (username === 'a1012430' && password === '0613') {
-        // 登入成功，顯示估價程式
-        document.getElementById('login').style.display = 'none'; // 隱藏登入頁面
-        document.getElementById('app').style.display = 'block'; // 顯示估價程式
-      } else {
-        // 登入失敗，顯示錯誤訊息
-        loginMessage.innerHTML = '帳戶名或密碼錯誤，請重試！';
+    // 驗證模組
+    const auth = {
+      credentials: { username: 'a1012430', password: '0613' },
+      login(username, password) {
+        return username === this.credentials.username && 
+               password === this.credentials.password;
       }
+    };
+
+    // UI 控制模組
+    const ui = {
+      showLogin() {
+        elements.loginDiv.style.display = 'block';
+        elements.appDiv.style.display = 'none';
+        elements.username.value = '';
+        elements.password.value = '';
+        elements.loginMessage.innerHTML = '';
+      },
+      showApp() {
+        elements.loginDiv.style.display = 'none';
+        elements.appDiv.style.display = 'block';
+        elements.resultDiv.innerHTML = '';
+      }
+    };
+
+    // 數據處理模組
+    const dataHandler = {
+      getUniqueModels() {
+        return [...new Set(priceData.工作表1.map(item => item.型號))];
+      },
+      getStoragesForModel(model) {
+        return priceData.工作表1
+          .filter(item => item.型號 === model)
+          .map(item => item.容量);
+      },
+      getBasePrice(model, storage) {
+        return priceData.工作表1.find(
+          item => item.型號 === model && item.容量 === storage
+        )?.價格 || 0;
+      },
+      getBatteryCost(model) {
+        return priceData.電池.find(item => item.電池 === model);
+      },
+      getScreenCost(model) {
+        return priceData.螢幕.find(item => item.螢幕 === model);
+      }
+    };
+
+    // 初始化下拉選單
+    function initDropdowns() {
+      const uniqueModels = dataHandler.getUniqueModels();
+      uniqueModels.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model;
+        option.textContent = model;
+        elements.modelSelect.appendChild(option);
+      });
+
+      elements.modelSelect.addEventListener('change', updateStorageOptions);
     }
 
-    // 動態生成型號下拉式選單
-    const modelSelect = document.getElementById('phoneModel');
-    const storageSelect = document.getElementById('phoneStorage');
-    const resultDiv = document.getElementById('result');
-
-    // 去重複的型號
-    const uniqueModels = [...new Set(priceData.工作表1.map(item => item.型號))];
-
-    // 填充型號選項
-    uniqueModels.forEach(model => {
-      const option = document.createElement('option');
-      option.value = model;
-      option.textContent = model;
-      modelSelect.appendChild(option);
-    });
-
-    // 當型號改變時，更新容量選項
-    modelSelect.addEventListener('change', () => {
-      const selectedModel = modelSelect.value;
-      storageSelect.innerHTML = '<option value="">請選擇</option>'; // 清空選項
+    // 更新容量選項
+    function updateStorageOptions() {
+      const selectedModel = elements.modelSelect.value;
+      elements.storageSelect.innerHTML = '<option value="">請選擇</option>';
 
       if (selectedModel) {
-        const storages = priceData.工作表1
-          .filter(item => item.型號 === selectedModel)
-          .map(item => item.容量);
-
+        const storages = dataHandler.getStoragesForModel(selectedModel);
         storages.forEach(storage => {
           const option = document.createElement('option');
           option.value = storage;
           option.textContent = storage;
-          storageSelect.appendChild(option);
+          elements.storageSelect.appendChild(option);
         });
       }
-    });
+    }
 
-    // 計算價格
-    function calculatePrice() {
-      const selectedModel = modelSelect.value;
-      const selectedStorage = storageSelect.value;
+    // 登入功能
+    function login() {
+      const username = elements.username.value.trim();
+      const password = elements.password.value.trim();
 
-      if (!selectedModel || !selectedStorage) {
-        resultDiv.innerHTML = '請選擇手機型號和容量';
+      if (!username || !password) {
+        elements.loginMessage.innerHTML = '請輸入帳戶名和密碼';
         return;
       }
 
-      const selectedItem = priceData.工作表1.find(
-        item => item.型號 === selectedModel && item.容量 === selectedStorage
-      );
-
-      if (selectedItem) {
-        resultDiv.innerHTML = `正常收購價：$${selectedItem.價格}`;
+      if (auth.login(username, password)) {
+        ui.showApp();
+        initDropdowns();
       } else {
-        resultDiv.innerHTML = '找不到該型號和容量的價格';
+        elements.loginMessage.innerHTML = '帳戶名或密碼錯誤，請重試！';
       }
     }
+
+    // 登出功能
+    function logout() {
+      ui.showLogin();
+    }
+
+    // 計算價格（已修改）
+    function calculatePrice() {
+      const model = elements.modelSelect.value;
+      const storage = elements.storageSelect.value;
+      const needBattery = elements.batteryChange.value === 'yes';
+      const needScreen = elements.screenChange.value === 'yes';
+
+      if (!model || !storage) {
+        elements.resultDiv.innerHTML = '請選擇手機型號和容量';
+        return;
+      }
+
+      let basePrice = dataHandler.getBasePrice(model, storage);
+      let resultMessage = `正常收購價：$${basePrice}`;
+      let totalDeduction = 0;
+
+      // 處理電池更換
+      if (needBattery) {
+        const battery = dataHandler.getBatteryCost(model);
+        if (battery) {
+          const batteryTotalCost = battery.Column3 + battery.Column4;
+          totalDeduction += batteryTotalCost;
+          resultMessage += `<br>電池更換總費用：$${batteryTotalCost} (零件:$${battery.Column3} + 工資:$${battery.Column4})`;
+        } else {
+          resultMessage += '<br>電池:暫無電池可維修';
+        }
+      }
+
+      // 處理螢幕更換
+      if (needScreen) {
+        const screen = dataHandler.getScreenCost(model);
+        if (screen) {
+          const screenTotalCost = screen.Column3 + screen.Column4;
+          totalDeduction += screenTotalCost;
+          resultMessage += `<br>螢幕更換總費用：$${screenTotalCost} (零件:$${screen.Column3} + 工資:$${screen.Column4})`;
+        } else {
+          resultMessage += '<br>螢幕:暫無螢幕可維修';
+        }
+      }
+
+      const finalPrice = Math.max(0, basePrice - totalDeduction);
+      resultMessage += `<br>最終收購價格：$${finalPrice}`;
+      elements.resultDiv.innerHTML = resultMessage;
+    }
+
+    // 初始化頁面和 Enter 鍵事件
+    function init() {
+      ui.showLogin();
+      
+      // 在密碼輸入框按 Enter 鍵觸發登入
+      elements.password.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          login();
+        }
+      });
+      
+      // 在帳戶名輸入框按 Enter 鍵觸發登入
+      elements.username.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          login();
+        }
+      });
+    }
+
+    // 執行初始化
+    init();
   </script>
 </body>
 </html>
